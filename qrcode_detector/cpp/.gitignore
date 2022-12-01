@@ -1,7 +1,5 @@
 /build
-/.venv
 *.pyd
 *.so
 *.exe
 *.dll
-__pycache__

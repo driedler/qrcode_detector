@@ -1,0 +1,21 @@
+cmake_minimum_required(VERSION 3.15.1)
+project(QRCodeDetector
+  VERSION 1.0.0
+  DESCRIPTION "Robust implementation for detecting QR codes using OpenCV"
+)
+
+# cmake_policy(SET CMP0091 NEW)
+# set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>" CACHE INTERNAL "")
+
+
+###################################################################################################
+# Add the build dependencies
+set(CPM_SOURCE_CACHE "${CMAKE_CURRENT_LIST_DIR}" CACHE INTERNAL "CPM cache directory")
+include(${CMAKE_CURRENT_LIST_DIR}/CPM.cmake)
+add_subdirectory(opencv)
+add_subdirectory(qrcode_detector)
+add_subdirectory(example)
+add_subdirectory(wrapper)
+
+
+

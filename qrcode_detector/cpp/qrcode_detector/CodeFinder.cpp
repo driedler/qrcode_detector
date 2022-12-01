@@ -3,7 +3,7 @@
 
 #include "CodeFinder.hpp"
 #include "ImageBinarization.hpp"
-#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc.hpp>
 
 using namespace std;
 using namespace cv;
@@ -1221,35 +1221,3 @@ Mat CodeFinder::drawNotFound() {
 	return codeNotFound;
 }
 
-/**
- * \brief Opens various debug images within windows for displaying.
- */
-void CodeFinder::showAll()
-{
-	imshow("All Contours", drawAllContours());
-	imshow("Pattern Contours", drawPatternContours());
-	imshow("All Segments", drawAllSegments());
-	imshow("All Lines", drawAllLines());
-
-	vector<Mat> merged = drawMergedLinesAndIntersections();
-	for (int i = 0; i < merged.size(); i++) {
-		imshow(string("Merged Lines And Intersections_") + to_string(i), merged[i]);
-	}
-
-	vector<Mat> extracted = drawExtractedCodes();
-	for (int i = 0; i < extracted.size(); i++) {
-		imshow(string("Extracted_") + to_string(i), extracted[i]);
-	}
-
-	vector<Mat> grid = drawExtractedCodeGrids();
-	for (int i = 0; i < grid.size(); i++) {
-		imshow(string("Extracted Grid_") + to_string(i), grid[i]);
-	}
-
-	vector<Mat> qrcodes = drawResized();
-	for (int i = 0; i < qrcodes.size(); i++)
-	{
-		imshow(string("QRCode_") + to_string(i), qrcodes[i]);
-	}
-	waitKey(0);
-}

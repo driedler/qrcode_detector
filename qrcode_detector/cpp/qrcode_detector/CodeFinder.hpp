@@ -15,7 +15,7 @@ namespace cv2 {
  */
 class CodeFinder {
 public:
-    CodeFinder(cv::Mat image, bool hasCode);
+    CodeFinder(cv::Mat image, bool hasCode=false);
 
     cv::Mat find();
 
@@ -32,7 +32,6 @@ public:
 	std::vector<cv::Mat> drawExtractedCodeGrids();
 	std::vector<cv::Mat> drawResized();
 
-	void showAll();
 	std::string findAndDecode(cv::OutputArray qrcode = cv::noArray());
 
 protected:
