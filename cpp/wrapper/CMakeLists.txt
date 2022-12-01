@@ -69,7 +69,7 @@ PRIVATE
 
 # Copy the built .pyd/.so to the directory:
 # <mltk root>/mltk/core/preprocess/audio/audio_feature_generator
-set(qrcode_detector_python_dir "${CMAKE_CURRENT_LIST_DIR}/../..")
+get_filename_component(qrcode_detector_python_dir "${CMAKE_CURRENT_LIST_DIR}/../../qrcode_detector" ABSOLUTE)
 add_custom_command(
   TARGET ${MODULE_NAME} 
   POST_BUILD
