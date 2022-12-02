@@ -21,10 +21,7 @@ if(WIN32)
 #     -static-libgcc -static-libstdc++ -static
 #   )
 else()
-  # Ensure all source files are built with the PIC flag
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fvisibility=hidden -fPIC")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden -fPIC")
-    
+
   # Ensure we statically link to the C/C++ libs
   # to reduce run-time dependencies
   target_link_options(${MODULE_NAME}
@@ -44,7 +41,7 @@ set_target_properties(${MODULE_NAME} PROPERTIES
 
 target_link_libraries(${MODULE_NAME} 
 PUBLIC 
-    qrcode_detector
+  qrcode_detector_shared
 )
 
 target_include_directories(${MODULE_NAME} 
