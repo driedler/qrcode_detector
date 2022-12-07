@@ -10,25 +10,9 @@ add_custom_target(${PROJECT_NAME}_wrapper
 )
 
 # Define the pybind11 wrapper target
-pybind11_add_module(${MODULE_NAME} 
+pybind11_add_module(${MODULE_NAME} SHARED
   qrcode_detector_pybind11.cc
 )
-
-# Add OS-specific build flags
-if(WIN32)
-#   target_link_options(${MODULE_NAME}
-#   PUBLIC
-#     -static-libgcc -static-libstdc++ -static
-#   )
-else()
-
-  # Ensure we statically link to the C/C++ libs
-  # to reduce run-time dependencies
-  target_link_options(${MODULE_NAME}
-  PUBLIC
-    -static-libgcc -static-libstdc++
-  )
-endif()
 
 
 # Set additional build properties
@@ -41,7 +25,7 @@ set_target_properties(${MODULE_NAME} PROPERTIES
 
 target_link_libraries(${MODULE_NAME} 
 PUBLIC 
-  qrcode_detector_shared
+  qrcode_detector
 )
 
 target_include_directories(${MODULE_NAME} 
@@ -54,10 +38,12 @@ PUBLIC
   cxx_std_17
 )
 
-# target_link_options(${MODULE_NAME}
-# PUBLIC
-#   -Wl,-Map,${CMAKE_CURRENT_BINARY_DIR}/output.map
-# )
+if(NOT MSVC)
+  target_link_options(${MODULE_NAME}
+  PUBLIC
+    -Wl,-Map,${CMAKE_CURRENT_BINARY_DIR}/output.map
+  )
+endif()
 
 target_compile_definitions(${MODULE_NAME}
 PRIVATE

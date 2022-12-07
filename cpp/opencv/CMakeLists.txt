@@ -1,4 +1,5 @@
 
+set(BUILD_LIST "core,imgproc,objdetect" CACHE INTERNAL "")
 CPMAddPackage(
     NAME OpenCV
     GITHUB_REPOSITORY opencv/opencv
@@ -6,8 +7,24 @@ CPMAddPackage(
     CACHE_VERSION 4.6.0
     DOWNLOAD_ONLY
     OPTIONS 
-        "BUILD_PACKAGE OFF"
-        "BUILD_SHARED_LIBS OFF"
+         "BUILD_PACKAGE OFF"
+         "BUILD_SHARED_LIBS OFF"
+         "ENABLE_PIC  ON"
+         "BUILD_ZLIB ON"
+         "WITH_OPENCL OFF"
+         "WITH_WEBP OFF"
+         "WITH_JPEG OFF"
+         "WITH_TIFF OFF"
+         "WITH_PROTOBUF OFF"
+         "WITH_IMGCODEC_HDR OFF"
+         "WITH_IMGCODEC_SUNRASTER OFF",
+         "WITH_IMGCODEC_PXM OFF",
+         "WITH_IMGCODEC_PFM OFF",
+         "WITH_PNG OFF"
+         "WITH_PTHREADS_PF OFF",
+         "OPENCV_FORCE_3RDPARTY_BUILD ON"
+         "OPENCV_DISABLE_FILESYSTEM_SUPPORT ON"
+         "WITH_ITT OFF"
 )
 
 add_library(OpenCV_Basic INTERFACE)
@@ -26,8 +43,8 @@ INTERFACE
 target_link_libraries(OpenCV_Basic
 INTERFACE
     opencv_core 
-    opencv_imgproc 
-    opencv_objdetect 
+    opencv_imgproc  
+    opencv_objdetect
 )
 
 add_library(OpenCV_GUI INTERFACE)

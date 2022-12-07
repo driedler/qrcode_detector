@@ -1,34 +1,29 @@
 
-macro(_define_library target)
-  cmake_parse_arguments(_args "" "TYPE" "" ${ARGN})
-  add_library(${target} ${_args_TYPE})
-  target_compile_features(${target}
-  PUBLIC 
-      cxx_std_11
-  )
-
-  target_include_directories(${target}
-  PUBLIC 
-    ${CMAKE_CURRENT_LIST_DIR}
-  )
-
-  target_sources(${target}
-  PRIVATE
-      CodeFinder.hpp
-      CodeFinder.cpp 
-      ImageBinarization.cpp
-  )
-
-  target_link_libraries(${target}
-  PUBLIC
-    OpenCV_Basic
-  )
-
-  if(MSVC)
-    target_compile_options(${target}  PUBLIC /wd4244)
-  endif()
-endmacro()
 
 
-_define_library(qrcode_detector)
-_define_library(qrcode_detector_shared TYPE SHARED)
+add_library(qrcode_detector)
+target_compile_features(qrcode_detector
+PUBLIC 
+  cxx_std_11
+)
+
+target_include_directories(qrcode_detector
+PUBLIC 
+  ${CMAKE_CURRENT_LIST_DIR}
+)
+
+target_sources(qrcode_detector
+PRIVATE
+  CodeFinder.hpp
+  CodeFinder.cpp 
+  ImageBinarization.cpp
+)
+
+target_link_libraries(qrcode_detector
+PUBLIC
+  OpenCV_Basic
+)
+
+if(MSVC)
+  target_compile_options(qrcode_detector  PUBLIC /wd4244)
+endif()

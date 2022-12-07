@@ -16,15 +16,31 @@ using namespace cv;
 #endif
 
 
-/**
- * \brief Used for sorting lines along an axis.
- * \param left The float is the axis intersection and the vector describes the line.
- * \param right The float is the axis intersection and the vector describes the line.
- * \return True if left is smaller than right. False otherwise.
- */
-bool compareLineAlongAxis(pair<float, Vec4f> left, pair<float, Vec4f> right) {
-	return left.first < right.first;
+
+std::string CodeFinder::findAndDecode(OutputArray qrcode) {
+	find();
+
+	vector<Mat> extracted = drawExtractedCodes();
+	for (int i = 0; i < extracted.size(); i++) {
+		int w = extracted[i].cols-1;
+		int h = extracted[i].rows-1;
+		std::vector<Point2i> bbox = {Point2i(0, 0), Point2i(w, 0), Point2i(w,h), Point2i(0,h)};
+		std::string data = qrcodeDecoder.decode(extracted[i], bbox);
+		if(data.length() > 0) {
+			if(qrcode.needed()) {
+				extracted[i].copyTo(qrcode);
+			} else {
+				qrcode.release();
+			}
+			return data;
+		}
+	}
+	return std::string();
 }
+
+
+
+
 
 /**
  * \brief Constructs a CodeFinder that will operate on the passed image.
@@ -889,6 +905,17 @@ void CodeFinder::sortLinesAlongAxis(vector<Vec4f> &lines, Vec4f axis) {
 		}
 	}
 
+	/**
+	* \brief Used for sorting lines along an axis.
+	* \param left The float is the axis intersection and the vector describes the line.
+	* \param right The float is the axis intersection and the vector describes the line.
+	* \return True if left is smaller than right. False otherwise.
+	*/
+	auto compareLineAlongAxis = [](pair<float, Vec4f> left, pair<float, Vec4f> right) -> bool 
+	{
+		return left.first < right.first;
+	};
+
 	// Sort lines within the axis system.
 	sort(sortedLines.begin(), sortedLines.end(), compareLineAlongAxis);
 	lines.clear();
@@ -968,27 +995,6 @@ bool CodeFinder::verifyQRCode(QRCode &code) {
 	{
 		return false;
 	}
-}
-
-std::string CodeFinder::findAndDecode(OutputArray qrcode) {
-	find();
-
-	vector<Mat> extracted = drawExtractedCodes();
-	for (int i = 0; i < extracted.size(); i++) {
-		int w = extracted[i].cols-1;
-		int h = extracted[i].rows-1;
-		std::vector<Point2i> bbox = {Point2i(0, 0), Point2i(w, 0), Point2i(w,h), Point2i(0,h)};
-		std::string data = qrcodeDecoder.decode(extracted[i], bbox);
-		if(data.length() > 0) {
-			if(qrcode.needed()) {
-				extracted[i].copyTo(qrcode);
-			} else {
-				qrcode.release();
-			}
-			return data;
-		}
-	}
-	return std::string();
 }
 
 /*****************************************************************************/

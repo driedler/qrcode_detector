@@ -3,3 +3,4 @@
 *.so
 *.exe
 *.dll
+!.vscode

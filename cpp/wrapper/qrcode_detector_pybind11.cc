@@ -9,6 +9,9 @@
 
 namespace py = pybind11;
 
+// This works around link error on ARM
+uintptr_t __pointer_chk_guard_local;
+
 
 PYBIND11_MODULE(MODULE_NAME, m) 
 {

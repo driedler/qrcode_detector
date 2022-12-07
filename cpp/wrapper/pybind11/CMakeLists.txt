@@ -1,6 +1,8 @@
 
 if(NOT DEFINED PYTHON_EXECUTABLE)
-    get_filename_component(PYTHON_DIR ${CMAKE_CURRENT_LIST_DIR}/../../../.venv ABSOLUTE)
+    if(NOT DEFINED PYTHON_DIR)
+        get_filename_component(PYTHON_DIR ${CMAKE_CURRENT_LIST_DIR}/../../../.venv ABSOLUTE)
+    endif()
 
     if(NOT EXISTS ${PYTHON_DIR})
         message(FATAL_ERROR "Must create Python virtual envioronment at ${PYTHON_DIR}, e.g.: python3 -m venv .venv, OR define the cmake variable: PYTHON_EXECUTABLE to point to the python executable")

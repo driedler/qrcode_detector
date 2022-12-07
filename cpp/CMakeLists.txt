@@ -14,8 +14,5 @@ set(CPM_SOURCE_CACHE "${CMAKE_CURRENT_LIST_DIR}" CACHE INTERNAL "CPM cache direc
 include(${CMAKE_CURRENT_LIST_DIR}/CPM.cmake)
 add_subdirectory(opencv)
 add_subdirectory(qrcode_detector)
-add_subdirectory(example)
 add_subdirectory(wrapper)
-
-
 
