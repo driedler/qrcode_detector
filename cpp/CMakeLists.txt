@@ -7,6 +7,12 @@ project(QRCodeDetector
 # cmake_policy(SET CMP0091 NEW)
 # set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>" CACHE INTERNAL "")
 
+if(NOT MSVC)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fvisibility=hidden -fPIC" CACHE INTERNAL "")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden -fPIC" CACHE INTERNAL "")
+endif()
+
+
 
 ###################################################################################################
 # Add the build dependencies

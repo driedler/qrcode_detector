@@ -26,9 +26,7 @@
 # https://github.com/Pro/raspi-toolchain/blob/master/Toolchain-rpi.cmake
 
 if("$ENV{RASPBERRY_VERSION}" STREQUAL "")
-	if(NOT DEFINED RASPBERRY_VERSION)
-		set(RASPBERRY_VERSION 1)
-	endif()
+	set(RASPBERRY_VERSION 1)
 else()
 	if($ENV{RASPBERRY_VERSION} VERSION_GREATER 3)
 		set(RASPBERRY_VERSION 3)
@@ -43,7 +41,7 @@ endif()
 # Then RASPBIAN_ROOTFS=$HOME/rpi/rootfs
 
 if("$ENV{RASPBIAN_ROOTFS}" STREQUAL "")
-	message(FATAL_ERROR "Define the RASPBIAN_ROOTFS environment variable to point to the raspbian rootfs.")
+	message(FATAL_ERROR "Define the RASPBIAN_ROOTFS CMake variable to point to the raspbian rootfs.")
 else()
 	set(SYSROOT_PATH "$ENV{RASPBIAN_ROOTFS}")
 endif()

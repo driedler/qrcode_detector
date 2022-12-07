@@ -28,6 +28,16 @@ PLAT_TO_CMAKE = {
     "win-arm64": "ARM64",
 }
 
+CURDIR = os.path.dirname(os.path.abspath(__file__))
+BUILD_RASPBERRY = os.environ.get('BUILD_RASPBERRY', '')
+RASPBIAN_ROOTFS = os.path.abspath(os.path.expanduser(os.path.expandvars(os.environ.get('RASPBIAN_ROOTFS', '~/rpi/rootfs'))))
+RASPBERRY_VERSION = os.environ.get('RASPBERRY_VERSION', '3')
+RASPBERRY_PYTHON_VERSION = os.environ.get('RASPBERRY_PYTHON_VERSION', '3.9')
+
+if os.environ.get('BUILD_RASPBERRY', '') == '1':
+    sys.argv.extend(['--plat-name', 'linux_armv7l'])
+    PYTHON_MODULE_EXTENSION = f'.cp{RASPBERRY_PYTHON_VERSION.replace(".", "")}-cp{RASPBERRY_PYTHON_VERSION.replace(".", "")}-linux_armv7l.so'
+
 
 # A CMakeExtension needs a sourcedir instead of a file list.
 # The name must be the _single_ output extension from the CMake build.
@@ -41,6 +51,10 @@ class CMakeExtension(Extension):
 class CMakeBuild(build_ext):
     def build_extension(self, ext: CMakeExtension) -> None:
         import cmake
+
+        ext.name = '_qrcode_detector'
+        ext._full_name = '_qrcode_detector'
+        ext._file_name = '_' + ext._file_name
 
         # Must be in this form due to bug in .resolve() only fixed in Python 3.10+
         ext_fullpath = Path.cwd() / self.get_ext_fullpath(ext.name)  # type: ignore[no-untyped-call]
@@ -56,13 +70,31 @@ class CMakeBuild(build_ext):
         # Can be set with Conda-Build, for example.
         cmake_generator = os.environ.get("CMAKE_GENERATOR", "")
 
+        os.environ['RASPBIAN_ROOTFS'] = RASPBIAN_ROOTFS
+        os.environ['RASPBERRY_VERSION'] = RASPBERRY_VERSION
+
+        PYTHON_EXECUTABLE = os.environ.get(
+            'PYTHON_EXECUTABLE', 
+            sys.executable if not BUILD_RASPBERRY else f'{RASPBIAN_ROOTFS}/usr/bin/python{RASPBERRY_PYTHON_VERSION}')
+
         # Set Python_EXECUTABLE instead if you use PYBIND11_FINDPYTHON
         # EXAMPLE_VERSION_INFO shows you how to pass a value into the C++ code
         # from Python.
         cmake_args = [
-            f"-DPYTHON_EXECUTABLE={sys.executable}",
+            f"-DPYTHON_EXECUTABLE={PYTHON_EXECUTABLE}",
             f"-DCMAKE_BUILD_TYPE={cfg}",  # not used on MSVC, but no harm
         ]
+
+        if BUILD_RASPBERRY == '1':
+            ext._file_name = '_qrcode_detector'+ PYTHON_MODULE_EXTENSION
+            cmake_args.append(f'-DCMAKE_TOOLCHAIN_FILE={CURDIR}/cpp/toolchain-rpi.cmake')
+            cmake_args.append(f'-DPYTHONLIBS_FOUND=1')
+            cmake_args.append(f'-DPYTHON_MODULE_EXTENSION={PYTHON_MODULE_EXTENSION}')
+            cmake_args.append(f'-DPYTHON_PREFIX={RASPBIAN_ROOTFS}/usr')
+            cmake_args.append(f'-DPYTHON_LIBRARIES={RASPBIAN_ROOTFS}/usr/lib/python{RASPBERRY_PYTHON_VERSION}')
+            cmake_args.append(f'-DPYTHON_INCLUDE_DIRS={RASPBIAN_ROOTFS}/usr/include/python{RASPBERRY_PYTHON_VERSION}')
+            cmake_args.append(f'-DPYTHON_MODULE_PREFIX=')
+
         build_args = []
         # Adding CMake arguments set as environment variable
         # (needed e.g. to build for ARM OSx on conda-forge)
@@ -134,15 +166,15 @@ class CMakeBuild(build_ext):
             pass
         cmd = ['cmake', f'-S{src_dir}', f'-B{build_temp}'] + cmake_args
         self.announce(' '.join(cmd))
-        subprocess.check_output(cmd)
+        subprocess.check_output(cmd, env=os.environ)
 
         cmd =  ['cmake', "--build", build_temp, '--target', 'QRCodeDetector_wrapper'] + build_args
         self.announce(' '.join(cmd))
-        subprocess.check_output(cmd , cwd=build_temp)
+        subprocess.check_output(cmd , cwd=build_temp, env=os.environ)
+        shutil.copy(f'{ext.sourcedir}/qrcode_detector/{ext._file_name}', f'{self.build_lib}/qrcode_detector/{ext._file_name}')
 
     def copy_extensions_to_source(self):
         pass
-
 
 setup(
     name='qrcode_detector',

@@ -4,10 +4,9 @@
         "vendor": "linux-gcc",
         "toolchainFile": "${workspaceFolder}/toolchain-rpi.cmake",
         "cmakeSettings": {
-            "RASPBERRY_VERSION": 3,
             "PYTHON_EXECUTABLE": "${userHome}/rpi/rootfs/usr/bin/python3.9",
             "PYTHONLIBS_FOUND": 1,
-            "PYTHON_MODULE_EXTENSION": ".so",
+            "PYTHON_MODULE_EXTENSION": ".cp39-cp39-linux_armv7l.so",
             "PYTHON_PREFIX": "${userHome}/rpi/rootfs/usr",
             "PYTHON_LIBRARIES": "${userHome}/rpi/rootfs/usr/lib/python3.9",
             "PYTHON_INCLUDE_DIRS": "${userHome}/rpi/rootfs/usr/include/python3.9",
@@ -17,6 +16,7 @@
             "name": "Ninja"
         },
         "environmentVariables": {
+            "RASPBERRY_VERSION": "3",
             "RASPBIAN_ROOTFS" : "${userHome}/rpi/rootfs"
         }
     }
