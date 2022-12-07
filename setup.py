@@ -11,11 +11,11 @@ from setuptools.command.build_ext import build_ext
 from setuptools.command.build_py import build_py
 
 try:
-    subprocess.check_output('ninja --version')
+    subprocess.check_output(['ninja', '--version'])
 except:
     subprocess.check_output([sys.executable, '-m', 'pip', 'install', 'ninja'])
 try:
-    subprocess.check_output('cmake --version')
+    import cmake
 except ModuleNotFoundError:
     subprocess.check_output([sys.executable, '-m', 'pip', 'install', 'cmake'])
 
