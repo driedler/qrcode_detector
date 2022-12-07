@@ -9,17 +9,62 @@ This implementation works __substantially__ better than the `QRCodeDetector` tha
 
 ## Install
 
+
+### Windows
+
 On Windows, install `Visual Studio Build Tools 2019`:
 https://visualstudio.microsoft.com/downloads/
 
-Then run the command:
+Then install this package into your Pyhton environment:
 ```
 pip install git+https://github.com/driedler/qrcode_detector.git
 ```
 
-which will build the Python wrapper and install the Python package into the Python environment.
 
 
+### Linux
+
+Ensure the GCC build toolchain is installed:
+
+```
+sudo apt install -y build-essential ninja-build gcc-9
+```
+
+Then install this package into your Pyhton environment:
+```
+pip install git+https://github.com/driedler/qrcode_detector.git
+```
+
+
+
+### Raspberry PI
+
+__NOTE:__ A pre-built Python package for Raspberry PI3 (or Raspberry PI Zero 2 W) can be installed with (this assumes Python3.9 on Rasparian OS 11 "Bullseye"):
+
+```
+pip3 install https://github.com/driedler/qrcode_detector/raw/main/dist/qrcode_detector-0.1.0-cp39-cp39-linux_armv7l.whl
+```
+
+
+(If on Windows, run from WSL2)
+
+The following is tested to work with a Raspberry PI 3 (or Raspberry PI Zero 2 W)
+using the `bullseye` Raspbarian OS.
+
+Download the toolchain by running the script: [install_rpi3_bullseye_toolchain.sh](cpp/install_rpi3_bullseye_toolchain.sh)
+
+
+Then build the RPI wheel
+```
+pip3 install wheel
+export BUILD_RASPBERRY=1
+python3 setup.py bdist_wheel
+```
+
+Then copy the built wheel to your raspberry PI and install with:
+```
+pip install <path to .whl>
+```
 
 ## Usage
 
