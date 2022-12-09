@@ -39,12 +39,16 @@ pip install git+https://github.com/driedler/qrcode_detector.git
 
 ### Raspberry PI
 
-__NOTE:__ A pre-built Python package for Raspberry PI3 (or Raspberry PI Zero 2 W) can be installed with (this assumes Python3.9 on Rasparian OS 11 "Bullseye"):
+
+#### Install pre-built
+
+A pre-built Python package for Raspberry PI3 (or Raspberry PI Zero 2 W) can be installed with (this assumes Python3.9 on Rasparian OS 11 "Bullseye"):
 
 ```
 pip3 install https://github.com/driedler/qrcode_detector/raw/main/dist/qrcode_detector-0.1.0-cp39-cp39-linux_armv7l.whl
 ```
 
+#### Build from source
 
 (If on Windows, run from WSL2)
 
@@ -65,6 +69,8 @@ Then copy the built wheel to your raspberry PI and install with:
 ```
 pip install <path to .whl>
 ```
+
+
 
 ## Usage
 
