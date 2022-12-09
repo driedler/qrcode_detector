@@ -36,7 +36,7 @@ RASPBERRY_PYTHON_VERSION = os.environ.get('RASPBERRY_PYTHON_VERSION', '3.9')
 
 if os.environ.get('BUILD_RASPBERRY', '') == '1':
     sys.argv.extend(['--plat-name', 'linux_armv7l'])
-    PYTHON_MODULE_EXTENSION = f'.cp{RASPBERRY_PYTHON_VERSION.replace(".", "")}-cp{RASPBERRY_PYTHON_VERSION.replace(".", "")}-linux_armv7l.so'
+    PYTHON_MODULE_EXTENSION = f'.cpython-{RASPBERRY_PYTHON_VERSION.replace(".", "")}-arm-linux-gnueabihf.so'
 
 
 # A CMakeExtension needs a sourcedir instead of a file list.
